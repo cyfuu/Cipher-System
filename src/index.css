@@ -1,3 +1,5 @@
+@import url('https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css');
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
