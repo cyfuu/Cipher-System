@@ -1,7 +1,8 @@
 import { encryptPlayfair, decryptPlayfair } from "../../utils/playfair";
 import { encryptPigpen, decryptPigpen } from "../../utils/pigpen";
+import { encryptHill, decryptHill } from "../../utils/hill";
+import { affineEncrypt, affineDecrypt } from "../../utils/affine";
 import { Cipher } from "../../constants/ciphers";
-import { decryptHill, encryptHill } from "../../utils/hill";
 
 export function encryptText(
   cipher: Cipher,
@@ -11,14 +12,24 @@ export function encryptText(
   switch (cipher) {
     case "Pigpen Cipher":
       return encryptPigpen(text); // ignore keys
+
     case "Affine Cipher":
-      return `Encrypted(${cipher}, A=${keys.affineA}, B=${keys.affineB}): ${text}`;
+      try {
+        if (keys.affineA == null || keys.affineB == null) {
+          throw new Error();
+        }
+        return affineEncrypt(text, Number(keys.affineA), Number(keys.affineB));
+      } catch {
+        return "Error: invalid Affine keys (a must be coprime with 26)";
+      }
+
     case "Playfair Cipher":
       try {
         return encryptPlayfair(text, keys.playfairKey);
       } catch {
         return "Error: invalid key";
       }
+
     case "Hill Cipher":
       try {
         if (!keys.hillMatrix || keys.hillMatrix.length !== 3) {
@@ -42,14 +53,24 @@ export function decryptText(
   switch (cipher) {
     case "Pigpen Cipher":
       return decryptPigpen(text); // ignore keys
+
     case "Affine Cipher":
-      return `Decrypted(${cipher}, A=${keys.affineA}, B=${keys.affineB}): ${text}`;
+      try {
+        if (keys.affineA == null || keys.affineB == null) {
+          throw new Error();
+        }
+        return affineDecrypt(text, Number(keys.affineA), Number(keys.affineB));
+      } catch {
+        return "Error: invalid Affine keys (a must be coprime with 26)";
+      }
+
     case "Playfair Cipher":
       try {
         return decryptPlayfair(text, keys.playfairKey);
       } catch {
         return "Error: invalid key";
       }
+
     case "Hill Cipher":
       try {
         if (!keys.hillMatrix || keys.hillMatrix.length !== 3) {
