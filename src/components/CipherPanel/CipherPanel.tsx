@@ -31,10 +31,15 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
         />
       )}
       {name === "Playfair Cipher" && (
-        <PlayfairKeyInput value={keys.playfairKey} setValue={(v) => setKeys({ ...keys, playfairKey: v })} />
+        <PlayfairKeyInput
+          value={keys.playfairKey}
+          setValue={(v) => setKeys({ ...keys, playfairKey: v })}
+        />
       )}
       {name === "Hill Cipher" && (
-        <HillKeyInput value={keys.hillMatrix} setValue={(v) => setKeys({ ...keys, hillMatrix: v })} />
+        <HillKeyInput
+          onValidMatrix={(matrix) => setKeys({ ...keys, hillMatrix: matrix })}
+        />
       )}
 
       {/* Pigpen info tooltip */}

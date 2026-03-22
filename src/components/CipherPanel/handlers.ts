@@ -1,8 +1,13 @@
 import { encryptPlayfair, decryptPlayfair } from "../../utils/playfair";
 import { encryptPigpen, decryptPigpen } from "../../utils/pigpen";
 import { Cipher } from "../../constants/ciphers";
+import { decryptHill, encryptHill } from "../../utils/hill";
 
-export function encryptText(cipher: Cipher, text: string, keys: Record<string, any>): string {
+export function encryptText(
+  cipher: Cipher,
+  text: string,
+  keys: Record<string, any>,
+): string {
   switch (cipher) {
     case "Pigpen Cipher":
       return encryptPigpen(text); // ignore keys
@@ -15,11 +20,25 @@ export function encryptText(cipher: Cipher, text: string, keys: Record<string, a
         return "Error: invalid key";
       }
     case "Hill Cipher":
-      return `Encrypted(${cipher}, Matrix=${keys.hillMatrix}): ${text}`;
+      try {
+        if (!keys.hillMatrix || keys.hillMatrix.length !== 3) {
+          throw new Error();
+        }
+        return encryptHill(text, keys.hillMatrix);
+      } catch {
+        return "Error: invalid 3x3 matrix (must be invertible mod 26)";
+      }
+
+    default:
+      return "Unsupported cipher";
   }
 }
 
-export function decryptText(cipher: Cipher, text: string, keys: Record<string, any>): string {
+export function decryptText(
+  cipher: Cipher,
+  text: string,
+  keys: Record<string, any>,
+): string {
   switch (cipher) {
     case "Pigpen Cipher":
       return decryptPigpen(text); // ignore keys
@@ -32,6 +51,16 @@ export function decryptText(cipher: Cipher, text: string, keys: Record<string, a
         return "Error: invalid key";
       }
     case "Hill Cipher":
-      return `Decrypted(${cipher}, Matrix=${keys.hillMatrix}): ${text}`;
+      try {
+        if (!keys.hillMatrix || keys.hillMatrix.length !== 3) {
+          throw new Error();
+        }
+        return decryptHill(text, keys.hillMatrix);
+      } catch {
+        return "Error: invalid 3x3 matrix (must be invertible mod 26)";
+      }
+
+    default:
+      return "Unsupported cipher";
   }
 }
