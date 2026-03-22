@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CaesarKeyInput, AffineKeyInput, PlayfairKeyInput, HillKeyInput } from "../keyInputs";
+import { AffineKeyInput, PlayfairKeyInput, HillKeyInput } from "../keyInputs";
 import { Cipher, DEFAULT_KEYS } from "../../constants/ciphers";
 import { encryptText, decryptText } from "./handlers";
 
@@ -12,7 +12,7 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
   const [outputText, setOutputText] = useState("");
 
   const [keys, setKeys] = useState({
-    caesarShift: DEFAULT_KEYS.caesarShift,
+    pigpenKey: DEFAULT_KEYS.pigpenKey,
     affineA: DEFAULT_KEYS.affineA,
     affineB: DEFAULT_KEYS.affineB,
     playfairKey: DEFAULT_KEYS.playfairKey,
@@ -22,9 +22,6 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
   return (
     <div className="flex flex-col gap-4">
       {/* Key Inputs */}
-      {name === "Caesar Cipher" && (
-        <CaesarKeyInput value={keys.caesarShift} setValue={(v) => setKeys({ ...keys, caesarShift: v })} />
-      )}
       {name === "Affine Cipher" && (
         <AffineKeyInput
           a={keys.affineA}
@@ -38,6 +35,13 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
       )}
       {name === "Hill Cipher" && (
         <HillKeyInput value={keys.hillMatrix} setValue={(v) => setKeys({ ...keys, hillMatrix: v })} />
+      )}
+
+      {/* Pigpen info tooltip */}
+      {name === "Pigpen Cipher" && (
+        <div className="text-gray-500 text-sm italic">
+          Pigpen Cipher uses symbolic letters — no key input needed.
+        </div>
       )}
 
       {/* Input Text */}

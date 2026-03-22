@@ -3,7 +3,7 @@ interface Props {
   setValue: (v: number) => void;
 }
 
-const CaesarKeyInput = ({ value, setValue }: Props) => (
+const PigpenKeyInput = ({ value, setValue }: Props) => (
   <div className="flex items-center gap-3">
     <label className="font-medium text-gray-700">Shift:</label>
     <input
@@ -15,4 +15,4 @@ const CaesarKeyInput = ({ value, setValue }: Props) => (
   </div>
 );
 
-export default CaesarKeyInput;
+export default PigpenKeyInput;
