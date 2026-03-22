@@ -3,6 +3,7 @@ import CaesarKeyInput from "./keyInputs/CaesarKeyInput";
 import AffineKeyInput from "./keyInputs/AffineKeyInput";
 import PlayfairKeyInput from "./keyInputs/PlayfairKeyInput";
 import HillKeyInput from "./keyInputs/HillKeyInput";
+import { encryptPlayfair, decryptPlayfair } from "../utils/playfair";
 
 interface CipherPanelProps {
   name: string;
@@ -16,45 +17,49 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
   const [caesarShift, setCaesarShift] = useState(3);
   const [affineA, setAffineA] = useState(5);
   const [affineB, setAffineB] = useState(8);
-  const [playfairKey, setPlayfairKey] = useState("KEYWORD");
+  const [playfairKey, setPlayfairKey] = useState("KEY");
   const [hillMatrix, setHillMatrix] = useState("3 3;2 5");
 
   const handleEncrypt = () => {
-    let keyInfo = "";
     switch (name) {
       case "Caesar Cipher":
-        keyInfo = `Shift=${caesarShift}`;
+        setOutputText(`Encrypted(${name}, Shift=${caesarShift}): ${inputText}`);
         break;
       case "Affine Cipher":
-        keyInfo = `A=${affineA}, B=${affineB}`;
+        setOutputText(`Encrypted(${name}, A=${affineA}, B=${affineB}): ${inputText}`);
         break;
       case "Playfair Cipher":
-        keyInfo = `Key=${playfairKey}`;
+        try {
+          setOutputText(encryptPlayfair(inputText, playfairKey));
+        } catch (e) {
+          setOutputText("Error: invalid key");
+        }
         break;
       case "Hill Cipher":
-        keyInfo = `Matrix=${hillMatrix}`;
+        setOutputText(`Encrypted(${name}, Matrix=${hillMatrix}): ${inputText}`);
         break;
     }
-    setOutputText(`Encrypted(${name}, ${keyInfo}): ${inputText}`);
   };
 
   const handleDecrypt = () => {
-    let keyInfo = "";
     switch (name) {
       case "Caesar Cipher":
-        keyInfo = `Shift=${caesarShift}`;
+        setOutputText(`Decrypted(${name}, Shift=${caesarShift}): ${inputText}`);
         break;
       case "Affine Cipher":
-        keyInfo = `A=${affineA}, B=${affineB}`;
+        setOutputText(`Decrypted(${name}, A=${affineA}, B=${affineB}): ${inputText}`);
         break;
       case "Playfair Cipher":
-        keyInfo = `Key=${playfairKey}`;
+        try {
+          setOutputText(decryptPlayfair(inputText, playfairKey));
+        } catch (e) {
+          setOutputText("Error: invalid key");
+        }
         break;
       case "Hill Cipher":
-        keyInfo = `Matrix=${hillMatrix}`;
+        setOutputText(`Decrypted(${name}, Matrix=${hillMatrix}): ${inputText}`);
         break;
     }
-    setOutputText(`Decrypted(${name}, ${keyInfo}): ${inputText}`);
   };
 
   return (
