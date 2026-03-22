@@ -1,15 +1,11 @@
 import { encryptPlayfair, decryptPlayfair } from "../../utils/playfair";
+import { encryptPigpen, decryptPigpen } from "../../utils/pigpen";
 import { Cipher } from "../../constants/ciphers";
 
-// Handles encryption for each cipher
-export function encryptText(
-  cipher: Cipher,
-  text: string,
-  keys: Record<string, any>
-): string {
+export function encryptText(cipher: Cipher, text: string, keys: Record<string, any>): string {
   switch (cipher) {
-    case "Caesar Cipher":
-      return `Encrypted(${cipher}, Shift=${keys.caesarShift}): ${text}`;
+    case "Pigpen Cipher":
+      return encryptPigpen(text); // ignore keys
     case "Affine Cipher":
       return `Encrypted(${cipher}, A=${keys.affineA}, B=${keys.affineB}): ${text}`;
     case "Playfair Cipher":
@@ -23,15 +19,10 @@ export function encryptText(
   }
 }
 
-// Handles decryption for each cipher
-export function decryptText(
-  cipher: Cipher,
-  text: string,
-  keys: Record<string, any>
-): string {
+export function decryptText(cipher: Cipher, text: string, keys: Record<string, any>): string {
   switch (cipher) {
-    case "Caesar Cipher":
-      return `Decrypted(${cipher}, Shift=${keys.caesarShift}): ${text}`;
+    case "Pigpen Cipher":
+      return decryptPigpen(text); // ignore keys
     case "Affine Cipher":
       return `Decrypted(${cipher}, A=${keys.affineA}, B=${keys.affineB}): ${text}`;
     case "Playfair Cipher":
