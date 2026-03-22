@@ -4,11 +4,11 @@ interface Props {
 }
 
 const CaesarKeyInput = ({ value, setValue }: Props) => (
-  <div className="flex items-center gap-2">
-    <label className="font-semibold">Shift:</label>
+  <div className="flex items-center gap-3">
+    <label className="font-medium text-gray-700">Shift:</label>
     <input
       type="number"
-      className="border rounded px-2 py-1 w-20"
+      className="border border-gray-300 rounded px-2 py-1 w-20 focus:outline-none focus:ring-2 focus:ring-blue-400"
       value={value}
       onChange={(e) => setValue(parseInt(e.target.value))}
     />

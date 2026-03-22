@@ -4,11 +4,11 @@ interface Props {
 }
 
 const HillKeyInput = ({ value, setValue }: Props) => (
-  <div className="flex flex-col gap-1">
-    <label className="font-semibold">Matrix (row1;row2...):</label>
+  <div className="flex items-center gap-3">
+    <label className="font-medium text-gray-700">Matrix (row1;row2...):</label>
     <input
       type="text"
-      className="border rounded px-2 py-1"
+      className="border border-gray-300 rounded px-2 py-1 w-20 focus:outline-none focus:ring-2 focus:ring-blue-400"
       value={value}
       onChange={(e) => setValue(e.target.value)}
     />
