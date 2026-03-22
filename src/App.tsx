@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Tabs from "./components/Tabs";
-import CipherPanel from "./components/CipherPanel";
+import CipherPanel from "./components/CipherPanel/CipherPanel";
 
 type Cipher = "Caesar Cipher" | "Affine Cipher" | "Playfair Cipher" | "Hill Cipher";
 
