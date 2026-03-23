@@ -43,7 +43,7 @@ export const KeyInputs = ({ name, keys, setKeys }: KeyInputsProps) => {
     );
   }
 
-  if (name === "Vigenere Cipher") {
+  if (name === "Vigenère Cipher") {
     return (
       <VigenereKeyInput
         value={keys.vigenereKey}
