@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Tabs from "./components/Tabs";
-import CipherPanel from "./components/CipherPanel/CipherPanel";
+import { CipherPanel } from "./components/CipherPanel/CipherPanel";
 import { CIPHERS, Cipher } from "./constants/ciphers";
 
 const App = () => {

@@ -1,11 +1,17 @@
-// Prepare the 5x5 matrix from the key
+// Normalize text
+function normalizeText(text: string): string {
+  return text.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+}
+
+// Generate 5x5 matrix
 export function generateMatrix(key: string): string[][] {
-  key = key.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
   const seen = new Set<string>();
   const matrix: string[][] = [];
   const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
 
-  const fullKey = (key + alphabet)
+  const normalizedKey = normalizeText(key);
+
+  const fullKey = (normalizedKey + alphabet)
     .split("")
     .filter((c) => {
       if (seen.has(c)) return false;
@@ -20,67 +26,97 @@ export function generateMatrix(key: string): string[][] {
   return matrix;
 }
 
-// Find coordinates of a letter in the matrix
+// Find position
 function findPosition(matrix: string[][], char: string): [number, number] {
   for (let i = 0; i < 5; i++)
     for (let j = 0; j < 5; j++)
       if (matrix[i][j] === char) return [i, j];
-  return [-1, -1];
+  throw new Error(`Character not found: ${char}`);
 }
 
-// Prepare digraphs (pair of letters)
+// Prepare digraphs for encryption (add X between repeated letters)
 function prepareDigraphs(text: string): string[][] {
-  text = text.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
-  const digraphs: string[][] = [];
+  const clean = normalizeText(text);
+  const result: string[][] = [];
+
   let i = 0;
-  while (i < text.length) {
-    const a = text[i];
-    let b = text[i + 1] || "X";
-    if (a === b) b = "X";
-    digraphs.push([a, b]);
-    i += a === b ? 1 : 2;
+  while (i < clean.length) {
+    const a = clean[i];
+    let b = clean[i + 1];
+
+    if (!b) {
+      result.push([a, "X"]);
+      break;
+    }
+
+    if (a === b) {
+      result.push([a, "X"]);
+      i += 1;
+    } else {
+      result.push([a, b]);
+      i += 2;
+    }
   }
-  return digraphs;
+
+  return result;
 }
 
-// Encrypt a pair
+// Split ciphertext into pairs for decryption
+function splitPairs(text: string): string[][] {
+  const clean = normalizeText(text);
+  const result: string[][] = [];
+  for (let i = 0; i < clean.length; i += 2) {
+    result.push([clean[i], clean[i + 1]]);
+  }
+  return result;
+}
+
+// Encrypt pair
 function encryptPair(matrix: string[][], a: string, b: string): string {
-  const [row1, col1] = findPosition(matrix, a);
-  const [row2, col2] = findPosition(matrix, b);
+  const [r1, c1] = findPosition(matrix, a);
+  const [r2, c2] = findPosition(matrix, b);
 
-  if (row1 === row2) {
-    return matrix[row1][(col1 + 1) % 5] + matrix[row2][(col2 + 1) % 5];
-  } else if (col1 === col2) {
-    return matrix[(row1 + 1) % 5][col1] + matrix[(row2 + 1) % 5][col2];
-  } else {
-    return matrix[row1][col2] + matrix[row2][col1];
-  }
+  if (r1 === r2) return matrix[r1][(c1 + 1) % 5] + matrix[r2][(c2 + 1) % 5];
+  if (c1 === c2) return matrix[(r1 + 1) % 5][c1] + matrix[(r2 + 1) % 5][c2];
+
+  return matrix[r1][c2] + matrix[r2][c1];
 }
 
-// Decrypt a pair
+// Decrypt pair
 function decryptPair(matrix: string[][], a: string, b: string): string {
-  const [row1, col1] = findPosition(matrix, a);
-  const [row2, col2] = findPosition(matrix, b);
+  const [r1, c1] = findPosition(matrix, a);
+  const [r2, c2] = findPosition(matrix, b);
 
-  if (row1 === row2) {
-    return matrix[row1][(col1 + 4) % 5] + matrix[row2][(col2 + 4) % 5];
-  } else if (col1 === col2) {
-    return matrix[(row1 + 4) % 5][col1] + matrix[(row2 + 4) % 5][col2];
-  } else {
-    return matrix[row1][col2] + matrix[row2][col1];
-  }
+  if (r1 === r2) return matrix[r1][(c1 + 4) % 5] + matrix[r2][(c2 + 4) % 5];
+  if (c1 === c2) return matrix[(r1 + 4) % 5][c1] + matrix[(r2 + 4) % 5][c2];
+
+  return matrix[r1][c2] + matrix[r2][c1];
 }
 
-// Encrypt Playfair
+// Encrypt
 export function encryptPlayfair(text: string, key: string): string {
   const matrix = generateMatrix(key);
   const digraphs = prepareDigraphs(text);
   return digraphs.map(([a, b]) => encryptPair(matrix, a, b)).join("");
 }
 
-// Decrypt Playfair
+// Decrypt with intelligent X removal
 export function decryptPlayfair(text: string, key: string): string {
   const matrix = generateMatrix(key);
-  const digraphs = prepareDigraphs(text);
-  return digraphs.map(([a, b]) => decryptPair(matrix, a, b)).join("");
+  const pairs = splitPairs(text);
+  let result = pairs.map(([a, b]) => decryptPair(matrix, a, b)).join("");
+
+  // Intelligent X removal: remove Xs between repeated letters
+  let cleaned = "";
+  for (let i = 0; i < result.length; i++) {
+    const current = result[i];
+    const prev = cleaned[cleaned.length - 1];
+    const next = result[i + 1];
+
+    // Remove X if it is between two identical letters
+    if (current === "X" && prev && next && prev === next) continue;
+    cleaned += current;
+  }
+
+  return cleaned;
 }
