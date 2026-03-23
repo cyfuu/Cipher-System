@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { KeyInputs } from "./KeyInputs";
-import { PlayfairMatrix } from "./PlayfairMatrix";
 import { CipherButtons } from "./CipherButtons";
 import { OutputArea } from "./OutputArea";
 import { Cipher, DEFAULT_KEYS } from "../../constants/ciphers";
@@ -18,6 +17,7 @@ export const CipherPanel = ({ name }: CipherPanelProps) => {
     affineB: DEFAULT_KEYS.affineB,
     playfairKey: DEFAULT_KEYS.playfairKey,
     hillMatrix: DEFAULT_KEYS.hillMatrix,
+    vigenereKey: DEFAULT_KEYS.vigenereKey,
   });
 
   const showPlayfairMatrix = useMemo(() => name === "Playfair Cipher", [name]);

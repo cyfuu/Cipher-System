@@ -3,13 +3,15 @@ export type Cipher =
   | "Pigpen Cipher"
   | "Affine Cipher"
   | "Playfair Cipher"
-  | "Hill Cipher";
+  | "Hill Cipher"
+  | "Vigenere Cipher";
 
 export const CIPHERS: Cipher[] = [
   "Pigpen Cipher",
   "Affine Cipher",
   "Playfair Cipher",
   "Hill Cipher",
+  "Vigenere Cipher",
 ];
 
 // Default key values
@@ -23,4 +25,5 @@ export const DEFAULT_KEYS = {
     [0, 1, 0],
     [0, 0, 1],
   ],
+  vigenereKey: "KEY",
 };

@@ -1,4 +1,4 @@
-import { AffineKeyInput, PlayfairKeyInput, HillKeyInput } from "../keyInputs";
+import { AffineKeyInput, PlayfairKeyInput, HillKeyInput, VigenereKeyInput } from "../keyInputs";
 import { Cipher } from "../../constants/ciphers";
 import { PlayfairMatrix } from "./PlayfairMatrix";
 
@@ -43,5 +43,13 @@ export const KeyInputs = ({ name, keys, setKeys }: KeyInputsProps) => {
     );
   }
 
+  if (name === "Vigenere Cipher") {
+    return (
+      <VigenereKeyInput
+        value={keys.vigenereKey}
+        setValue={(v) => setKeys({ ...keys, vigenereKey: v })}
+      />
+    );
+  }
   return null;
 };

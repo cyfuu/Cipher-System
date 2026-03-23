@@ -8,8 +8,6 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center py-8 px-4 bg-gray-100">
-      
-      {/* Header with logo */}
       <div className="flex items-center gap-3 mb-8">
         <img
           src="/logo.svg"
