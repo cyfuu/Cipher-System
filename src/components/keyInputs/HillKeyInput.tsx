@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { invertMatrix } from "../../utils/hill"; // ✅ reuse correct logic
+import { invertMatrix } from "../../utils/hill";
 
 const mod26 = (n: number) => ((n % 26) + 26) % 26;
 

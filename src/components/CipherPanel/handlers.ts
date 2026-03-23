@@ -2,6 +2,7 @@ import { encryptPlayfair, decryptPlayfair } from "../../utils/playfair";
 import { encryptPigpen, decryptPigpen } from "../../utils/pigpen";
 import { encryptHill, decryptHill } from "../../utils/hill";
 import { affineEncrypt, affineDecrypt } from "../../utils/affine";
+import { encryptVigenere, decryptVigenere } from "../../utils/vigenere";
 import { Cipher } from "../../constants/ciphers";
 
 export function encryptText(
@@ -40,8 +41,10 @@ export function encryptText(
         return "Error: invalid 3x3 matrix (must be invertible mod 26)";
       }
 
-    default:
-      return "Unsupported cipher";
+    case "Vigenère Cipher":
+      if (!keys.vigenereKey) return "Error: missing Vigenère key";
+      return encryptVigenere(text, keys.vigenereKey);
+
   }
 }
 
@@ -81,7 +84,8 @@ export function decryptText(
         return "Error: invalid 3x3 matrix (must be invertible mod 26)";
       }
 
-    default:
-      return "Unsupported cipher";
+    case "Vigenère Cipher":
+      if (!keys.vigenereKey) return "Error: missing Vigenère key";
+      return decryptVigenere(text, keys.vigenereKey);
   }
 }
