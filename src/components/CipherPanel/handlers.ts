@@ -41,7 +41,7 @@ export function encryptText(
         return "Error: invalid 3x3 matrix (must be invertible mod 26)";
       }
 
-    case "Vigenere Cipher":
+    case "Vigenère Cipher":
       if (!keys.vigenereKey) return "Error: missing Vigenère key";
       return encryptVigenere(text, keys.vigenereKey);
 
@@ -84,7 +84,7 @@ export function decryptText(
         return "Error: invalid 3x3 matrix (must be invertible mod 26)";
       }
 
-    case "Vigenere Cipher":
+    case "Vigenère Cipher":
       if (!keys.vigenereKey) return "Error: missing Vigenère key";
       return decryptVigenere(text, keys.vigenereKey);
   }
