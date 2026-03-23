@@ -8,9 +8,18 @@ const App = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center py-8 px-4 bg-gray-100">
-      <h1 className="text-3xl md:text-4xl font-bold mb-8 text-center text-gray-800">
-        Cipher Dashboard
-      </h1>
+      
+      {/* Header with logo */}
+      <div className="flex items-center gap-3 mb-8">
+        <img
+          src="/logo.svg"
+          alt="Logo"
+          className="h-8 w-8 md:h-10 md:w-10 invert"
+        />
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+          Cipher System
+        </h1>
+      </div>
 
       <Tabs ciphers={CIPHERS} activeTab={activeTab} setActiveTab={setActiveTab} />
 

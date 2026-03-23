@@ -10,6 +10,7 @@ interface CipherPanelProps {
 const CipherPanel = ({ name }: CipherPanelProps) => {
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState("");
+  const [copied, setCopied] = useState(false);
 
   const [keys, setKeys] = useState({
     pigpenKey: DEFAULT_KEYS.pigpenKey,
@@ -18,6 +19,18 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
     playfairKey: DEFAULT_KEYS.playfairKey,
     hillMatrix: DEFAULT_KEYS.hillMatrix,
   });
+
+  const handleCopy = async () => {
+    if (!outputText) return;
+
+    try {
+      await navigator.clipboard.writeText(outputText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      console.error("Copy failed");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,14 +55,14 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
         />
       )}
 
-      {/* Pigpen info tooltip */}
+      {/* Pigpen info */}
       {name === "Pigpen Cipher" && (
         <div className="text-gray-500 text-sm italic">
           Pigpen Cipher uses symbolic letters — no key input needed.
         </div>
       )}
 
-      {/* Input Text */}
+      {/* Input */}
       <textarea
         className="border border-gray-300 rounded-lg px-4 py-2 h-28 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
         placeholder="Type your text here..."
@@ -73,12 +86,27 @@ const CipherPanel = ({ name }: CipherPanelProps) => {
         </button>
       </div>
 
-      {/* Output */}
-      <textarea
-        className="border border-gray-300 rounded-lg px-4 py-2 h-28 resize-none bg-gray-50 focus:outline-none"
-        value={outputText}
-        readOnly
-      />
+      {/* Output + Copy */}
+      <div className="flex flex-col gap-2">
+        <textarea
+          className="border border-gray-300 rounded-lg px-4 py-2 h-28 resize-none bg-gray-50 focus:outline-none"
+          value={outputText}
+          readOnly
+        />
+
+        <button
+          onClick={handleCopy}
+          disabled={!outputText}
+          className={`py-2 rounded-lg text-sm font-medium transition
+            ${
+              outputText
+                ? "bg-gray-800 text-white hover:bg-gray-900"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+            }`}
+        >
+          {copied ? "Copied!" : "Copy Output"}
+        </button>
+      </div>
     </div>
   );
 };
