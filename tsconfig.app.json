@@ -6,6 +6,7 @@
     "moduleResolution": "node",       // ← important
     "allowJs": true,
     "strict": true,
+    "ignoreDeprecations": "6.0",
     "jsx": "react-jsx",
     "esModuleInterop": true,
     "skipLibCheck": true,
